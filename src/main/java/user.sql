@@ -1,3 +1,4 @@
+use web;
 drop table if exists user_interest;
 drop table if exists user;
 drop table if exists base_data;
