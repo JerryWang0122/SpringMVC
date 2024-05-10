@@ -16,5 +16,6 @@ public interface BaseDataDao {
 
     List<Interest> findAllInterests();
     Interest getInterestById(Integer id);
-    int addInterest(Integer userId, Integer InterestId);
+    int addInterest(Integer userId, Integer interestId);    // 新增使用者的興趣
+    int deleteInterestsByUserId(Integer userId); // 刪除使用者的興趣
 }
