@@ -46,7 +46,6 @@ public class UserController {
     @PostMapping
     @ResponseBody
     public String createUser(User user) {
-        System.out.println(user);
         Boolean success = userService.addUser(user);
         return "create: " + success.toString();
     }
