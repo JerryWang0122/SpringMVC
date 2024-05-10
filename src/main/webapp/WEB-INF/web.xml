@@ -11,6 +11,7 @@
     </welcome-file-list>
 
     <!-- 中文支援 -->
+    <!--  解決 url 編碼問題  -->
     <filter>
         <filter-name>springUtf8Encoding</filter-name>
         <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>

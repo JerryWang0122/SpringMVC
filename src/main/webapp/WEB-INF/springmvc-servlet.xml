@@ -77,6 +77,7 @@
     </bean>
 
     <!--  解決中文 與 JSR 303 Validator 設定 -->
+    <!--  處理 .properties 的編碼問題  -->
     <mvc:annotation-driven validator="validator">
         <mvc:message-converters
                 register-defaults="true">
