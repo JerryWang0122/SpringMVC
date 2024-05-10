@@ -40,8 +40,8 @@ public class UserDaoImpl implements UserDao{
         int userId = keyHolder.getKey().intValue(); // 最新 新增紀錄的 user id
 
         // 新增該 user 的興趣紀錄
-        for (Integer interstId : user.getInterestIds()) {
-            baseDataDao.addInterest(userId, interstId);
+        for (Integer interestId : user.getInterestIds()) {
+            baseDataDao.addInterest(userId, interestId);
         }
         return userId;
     }
