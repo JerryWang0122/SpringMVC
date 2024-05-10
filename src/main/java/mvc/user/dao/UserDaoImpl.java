@@ -11,6 +11,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class UserDaoImpl implements UserDao{
@@ -76,7 +77,20 @@ public class UserDaoImpl implements UserDao{
     @Override
     public User getUserById(Integer userId) {
         String sql = "select id, name, age, birth, resume, education_id, gender_id from user where id = ?";
-        return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(User.class), userId);
+        User user = jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(User.class), userId);
+        // 查詢興趣並注入
+        String interest_sql = "select interest_id from user_interest where user_id = ?";
+        List<Map<String, Object>> interestList = jdbcTemplate.queryForList(interest_sql, userId);
+
+        // System.out.println(interestList);
+        // 將 [{interest_id=2}, {interest_id=3}, {interest_id=4}]
+        // 轉 [2, 3, 4]
+        Integer[] interestIds = interestList.stream()
+                                            .map(data -> data.get("interest_id"))   // 2, 3, 4
+                                            .toArray(Integer[]::new);   // [2, 3, 4]
+        user.setInterestIds(interestIds);
+
+        return user;
     }
 
     @Override
