@@ -1,5 +1,6 @@
 package mvc.user.controller;
 
+import mvc.user.model.dto.UserDto;
 import mvc.user.model.po.User;
 import mvc.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,9 +34,9 @@ public class UserController {
     @GetMapping
     // model: 給jsp的資料要放在model容器中
     public String queryAllUsers(Model model) {
-        List<User> users = userService.findUsers();
-        // 將 users 資料傳給 jsp
-        model.addAttribute("users", users);
+        List<UserDto> userDtos = userService.findUserDtos();
+        // 將 userDtos 資料傳給 jsp
+        model.addAttribute("userDtos", userDtos);
 
         // 完整 jsp(view) 路徑 = "/WEB-INF/view/user/user.jsp";
         // 因為在 springmvc-servlet.xml
