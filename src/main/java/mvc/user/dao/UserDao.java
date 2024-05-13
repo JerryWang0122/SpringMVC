@@ -1,5 +1,6 @@
 package mvc.user.dao;
 
+import mvc.user.model.po.Statistics;
 import mvc.user.model.po.User;
 
 import java.util.List;
@@ -10,4 +11,9 @@ public interface UserDao {
     int deleteUser(Integer id);
     User getUserById(Integer id);
     List<User> findAllUsers();
+
+    // 性別統計
+    List<Statistics> queryGenderStatistics();
+    // 學歷統計
+    List<Statistics> queryEducationStatistics();
 }

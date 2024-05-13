@@ -1,5 +1,6 @@
 package mvc.user.dao;
 
+import mvc.user.model.po.Statistics;
 import mvc.user.model.po.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -98,6 +99,24 @@ public class UserDaoImpl implements UserDao{
         });
 
         return users;
+    }
+
+    @Override
+    public List<Statistics> queryGenderStatistics() {
+        String sql = "SELECT a.gender_id as id, b.item_name as name, count(*) as count " +
+                "FROM user a, base_data b " +
+                "where a.gender_id = b.item_id and b.group_name = 'Gender' " +
+                "group by a.gender_id, b.item_name";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Statistics.class));
+    }
+
+    @Override
+    public List<Statistics> queryEducationStatistics() {
+        String sql = "SELECT a.education_id as id, b.item_name as name, count(*) as count " +
+                "FROM user a, base_data b " +
+                "where a.education_id = b.item_id and b.group_name = 'Education' " +
+                "group by a.education_id, b.item_name";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<>(Statistics.class));
     }
 
     // 根據使用者的 userId 來查找到興趣
