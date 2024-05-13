@@ -33,10 +33,13 @@ public class UserController {
 
     @GetMapping
     // model: 給jsp的資料要放在model容器中
-    public String queryAllUsers(Model model) {
+    public String queryAllUsers(@ModelAttribute User user, Model model) {
         List<UserDto> userDtos = userService.findUserDtos();
         // 將 userDtos 資料傳給 jsp
         model.addAttribute("userDtos", userDtos);
+
+        // @ModelAttribute User user -> model.setAttribute("user", user)
+        user.setAge(18);    // 預設年齡
 
         // 完整 jsp(view) 路徑 = "/WEB-INF/view/user/user.jsp";
         // 因為在 springmvc-servlet.xml

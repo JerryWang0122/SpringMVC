@@ -20,7 +20,9 @@
     <table>
         <tr>
             <%-- User 表單 --%>
-            <td></td>
+            <td>
+                <%@include file="userform.jspf"%>
+            </td>
             <%-- User 圖表 --%>
             <td></td>
         </tr>
