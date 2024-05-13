@@ -35,11 +35,11 @@
                         <td>${ userDto.age }</td>
                         <td><fmt:formatDate value="${ userDto.birth }"  pattern="yyyy-MM-dd"/></td>
                         <td>${ userDto.education.name }</td>
-                        <%--   --%>
+                        <%--  呼叫 dto 的 getInterestNames，這些點點不是直接呼叫屬性而是呼叫getter --%>
                         <td>${ userDto.interestNames }</td>
                         <td>${ userDto.resume }</td>
                         <td>
-                            <a href="#" class="btn btn-primary">修改</a>
+                            <a href="${ pageContext.request.contextPath }/mvc/user/${ userDto.id }" class="btn btn-primary">修改</a>
                         </td>
                         <td>
                             <a href="#" class="btn btn-danger">刪除</a>

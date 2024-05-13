@@ -5,7 +5,7 @@
 <%-- Spring Form 表單標籤 --%>
 <%@ taglib prefix="sp" uri="http://www.springframework.org/tags/form"%>
 
-<sp:form modelAttribute="user" method="post" action="${ pageContext.request.contextPath }/mvc/user">
+<sp:form modelAttribute="user" method="post" action="${ pageContext.request.contextPath }/mvc/user/${ user.id }">
 
     <fieldset>
         <legend>User Form</legend>
@@ -19,7 +19,10 @@
         興趣：<sp:checkboxes path="interestIds" items="${ interests }" itemValue="id" itemLabel="name" /> <br>
         履歷：<sp:textarea path="resume" /> <br>
 
-        <button type="submit" class="btn btn-primary">新增</button>
+        <%-- hidden field --%>
+        <input name="_method" type="hidden" value="${ _method }" />
+
+        <button type="submit" class="btn btn-primary">${ _method eq 'PUT' ? '修改' : '新增'}</button>
     </fieldset>
 
 </sp:form>

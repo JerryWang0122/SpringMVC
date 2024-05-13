@@ -21,11 +21,11 @@ import java.util.List;
  * ---------------------------------------------------------------------------
  * GET    | /user   | 取得所有使用者資料，並重導到 /WEB-INF/view/user/user.jsp 頁面
  * GET    | /user/1 | 根據 userId，取得單筆使用者資料
- * POST   | /user   | 新增使用者資料，會自動夾帶 User 物件資料上來
+ * POST   | /user/  | 新增使用者資料，會自動夾帶 User 物件資料上來
  * PUT    | /user/1 | 修改指定 userId 的使用者資料，會自動夾帶要修改的 User 物件資料上來
  * DELETE | /user/1 | 刪除指定 userId 的使用者紀錄
  * ---------------------------------------------------------------------------
- * 整體的 URL : http://localhost:8080/SpringMVC/mvc/user
+ * 整體的 URL : http://localhost:8080/SpringMVC_war_exploded/mvc/user
  */
 
 @Controller
@@ -41,17 +41,8 @@ public class UserController {
     @GetMapping
     // model: 給jsp的資料要放在model容器中
     public String queryAllUsers(@ModelAttribute User user, Model model) {
-        List<UserDto> userDtos = userService.findUserDtos();
-        List<Education> educations = baseDataDao.findAllEducations();   // 所有學歷
-        List<Gender> genders = baseDataDao.findAllGenders();   // 所有性別
-        List<Interest> interests = baseDataDao.findAllInterests();
-
-        // 將 userDtos 資料傳給 jsp
-        model.addAttribute("userDtos", userDtos);
-        // 選單選項
-        model.addAttribute("educations", educations);
-        model.addAttribute("genders", genders);
-        model.addAttribute("interests", interests);
+        // 基本要傳給jsp的資訊
+        addBasicModel(model);
 
         // @ModelAttribute User user -> model.setAttribute("user", user)
         user.setAge(18);    // 預設年齡
@@ -65,24 +56,31 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    @ResponseBody
-    public String getUser(@PathVariable("userId") Integer userId) {
+    public String getUser(@PathVariable("userId") Integer userId, Model model) {
         User user = userService.getUser(userId);
-        return user.toString();
+        // 將 user 資料傳給 jsp
+        model.addAttribute("user", user);
+
+        // 將 _method="PUT" 傳給 jsp
+        model.addAttribute("_method", "PUT");
+
+        // 基本要傳給jsp的資訊
+        addBasicModel(model);
+
+        return "user/user";
     }
 
-    @PostMapping
+    @PostMapping("/")
     public String createUser(User user) {
         Boolean success = userService.addUser(user);
         return "redirect:/mvc/user";
     }
 
     @PutMapping("/{userId}")
-    @ResponseBody
     public String updateUser(@PathVariable("userId") Integer userId, User user) {
         System.out.println(user);
         Boolean success = userService.updateUser(userId, user);
-        return "update: " + success.toString();
+        return "redirect:/mvc/user";
     }
 
     @DeleteMapping("/{userId}")
@@ -90,5 +88,20 @@ public class UserController {
     public String deleteUser(@PathVariable("userId") Integer userId) {
         Boolean success = userService.deleteUser(userId);
         return "delete: " + success.toString();
+    }
+
+    // 基本要傳給user.jsp的資料
+    private void addBasicModel(Model model) {
+        List<UserDto> userDtos = userService.findUserDtos();
+        List<Education> educations = baseDataDao.findAllEducations();   // 所有學歷
+        List<Gender> genders = baseDataDao.findAllGenders();   // 所有性別
+        List<Interest> interests = baseDataDao.findAllInterests();
+
+        model.addAttribute("userDtos", userDtos);
+        // 選單選項
+        model.addAttribute("educations", educations);
+        model.addAttribute("genders", genders);
+        model.addAttribute("interests", interests);
+
     }
 }
