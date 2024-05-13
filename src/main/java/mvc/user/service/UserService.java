@@ -35,8 +35,8 @@ public class UserService {
             userDto.setAge(user.getAge());
             userDto.setBirth(user.getBirth());
             userDto.setResume(user.getResume());
-            userDto.setEducation(baseDataDao.getEducationById(user.getId()));
-            userDto.setGender(baseDataDao.getGenderById(user.getId()));
+            userDto.setEducation(baseDataDao.getEducationById(user.getEducationId()));
+            userDto.setGender(baseDataDao.getGenderById(user.getGenderId()));
 
             // 取得所有興趣 id
             Integer[] interestIds = user.getInterestIds();

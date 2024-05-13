@@ -9,7 +9,17 @@
 
     <fieldset>
         <legend>User Form</legend>
-        ${ user }
+        <%-- 表單元素 --%>
+        <%-- path 會幫忙產生 form 裡面的 id & name --%>
+        姓名：<sp:input path="name" /> <br>
+        年齡：<sp:input path="age" type="number" /> <br>
+        生日：<sp:input path="birth" type="date" /> <br>
+        學歷：<sp:select path="educationId" items="${ educations }" itemValue="id" itemLabel="name" /> <br>
+        性別：<sp:radiobuttons path="genderId" items="${ genders }" itemValue="id" itemLabel="name" /> <br>
+        興趣：<sp:checkboxes path="interestIds" items="${ interests }" itemValue="id" itemLabel="name" /> <br>
+        履歷：<sp:textarea path="resume" /> <br>
+
+        <button type="submit" class="btn btn-primary">新增</button>
     </fieldset>
 
 </sp:form>

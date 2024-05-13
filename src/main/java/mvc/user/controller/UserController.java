@@ -1,6 +1,10 @@
 package mvc.user.controller;
 
+import mvc.user.dao.BaseDataDao;
 import mvc.user.model.dto.UserDto;
+import mvc.user.model.po.Education;
+import mvc.user.model.po.Gender;
+import mvc.user.model.po.Interest;
 import mvc.user.model.po.User;
 import mvc.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +35,23 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private BaseDataDao baseDataDao;
+
     @GetMapping
     // model: 給jsp的資料要放在model容器中
     public String queryAllUsers(@ModelAttribute User user, Model model) {
         List<UserDto> userDtos = userService.findUserDtos();
+        List<Education> educations = baseDataDao.findAllEducations();   // 所有學歷
+        List<Gender> genders = baseDataDao.findAllGenders();   // 所有性別
+        List<Interest> interests = baseDataDao.findAllInterests();
+
         // 將 userDtos 資料傳給 jsp
         model.addAttribute("userDtos", userDtos);
+        // 選單選項
+        model.addAttribute("educations", educations);
+        model.addAttribute("genders", genders);
+        model.addAttribute("interests", interests);
 
         // @ModelAttribute User user -> model.setAttribute("user", user)
         user.setAge(18);    // 預設年齡
@@ -57,10 +72,9 @@ public class UserController {
     }
 
     @PostMapping
-    @ResponseBody
     public String createUser(User user) {
         Boolean success = userService.addUser(user);
-        return "create: " + success.toString();
+        return "redirect:/mvc/user";
     }
 
     @PutMapping("/{userId}")
