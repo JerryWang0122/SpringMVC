@@ -50,9 +50,10 @@ public class UserController {
         return "create: " + success.toString();
     }
 
-    @PutMapping("/{userId}")
+    @PostMapping("/update/{userId}")
     @ResponseBody
     public String updateUser(@PathVariable("userId") Integer userId, User user) {
+        System.out.println(user);
         Boolean success = userService.updateUser(userId, user);
         return "update: " + success.toString();
     }
