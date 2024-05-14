@@ -86,8 +86,21 @@ public class UserController {
     }
 
     @PutMapping("/{userId}")
-    public String updateUser(@PathVariable("userId") Integer userId, User user) {
-        System.out.println(user);
+    public String updateUser(@PathVariable("userId") Integer userId, @Valid User user, BindingResult result, Model model) {
+        if (result.hasErrors()) {
+            // 基本要傳給 user.jsp 的資訊
+            addBasicModel(model);
+            // 有錯誤的 user 資料一併帶入給表單使用(內含錯誤的原因)
+            model.addAttribute("user", user);
+            // 重要！要傳 PUT 回去
+            model.addAttribute("_method", "PUT");
+            return "user/user";
+            /**
+             * Note: put 無法直接發 request 到 jsp (只接受GET/POST)，
+             * 因此需要到 jsp 加一個標注 -> isErrorPage="true"
+             * 允許該 jsp 處理各種不同的請求動作
+             */
+        }
         Boolean success = userService.updateUser(userId, user);
         return "redirect:/mvc/user";
     }

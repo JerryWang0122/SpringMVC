@@ -12,12 +12,19 @@
         <%-- 表單元素 --%>
         <%-- path 會幫忙產生 form 裡面的 id & name --%>
         姓名：<sp:input path="name" /> <br>
+             <sp:errors path="name" cssStyle="color: red" /><br>
         年齡：<sp:input path="age" type="number" /> <br>
+             <sp:errors path="age" cssStyle="color: red" /><br>
         生日：<sp:input path="birth" type="date" /> <br>
+             <sp:errors path="birth" cssStyle="color: red" /><br>
         學歷：<sp:select path="educationId" items="${ educations }" itemValue="id" itemLabel="name" /> <br>
+             <sp:errors path="educationId" cssStyle="color: red" /><br>
         性別：<sp:radiobuttons path="genderId" items="${ genders }" itemValue="id" itemLabel="name" /> <br>
+             <sp:errors path="genderId" cssStyle="color: red" /><br>
         興趣：<sp:checkboxes path="interestIds" items="${ interests }" itemValue="id" itemLabel="name" /> <br>
+             <sp:errors path="interestIds" cssStyle="color: red" /><br>
         履歷：<sp:textarea path="resume" /> <br>
+             <sp:errors path="resume" cssStyle="color: red" /><br>
 
         <%-- hidden field --%>
         <input name="_method" type="hidden" value="${ _method }" />
