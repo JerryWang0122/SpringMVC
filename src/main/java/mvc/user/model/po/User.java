@@ -18,7 +18,7 @@ import java.util.Date;
 public class User {
     private Integer id; // 序號
 
-    @NotEmpty(message = "姓名不可以是空白")
+    @NotEmpty(message = "姓名不可以是空白")  // only work on hibernate.validator.constraints
     @Size(min = 2, max = 50, message = "姓名必須介於 {min} ~ {max} 字之間")
     private String name;  // 姓名
 
