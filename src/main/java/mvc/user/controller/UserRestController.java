@@ -2,12 +2,11 @@ package mvc.user.controller;
 
 import com.google.gson.Gson;
 import mvc.user.dao.BaseDataDao;
+import mvc.user.model.dto.UserDto;
 import mvc.user.model.po.User;
 import mvc.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -37,11 +36,22 @@ public class UserRestController {
 
     Gson gson = new Gson();
 
+    // 查詢多筆紀錄
     @GetMapping
     public String queryAllUsers() {
-        List<User> users = userService.findUsers();
+        List<UserDto> userDtos = userService.findUserDtos();
         // 回傳 json 字串
-        return gson.toJson(users);
+        return gson.toJson(userDtos);
     }
+
+    // 查詢單筆紀錄
+    @GetMapping("/{id}")
+    public String getUser(@PathVariable("id") Integer id) {
+        User user = userService.getUser(id);
+        return gson.toJson(user);
+    }
+
+
+
 
 }
