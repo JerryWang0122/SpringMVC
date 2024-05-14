@@ -7,8 +7,10 @@ import mvc.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -68,7 +70,17 @@ public class UserController {
     }
 
     @PostMapping("/")
-    public String createUser(User user) {
+    public String createUser(@Valid User user, BindingResult result, Model model) {
+        // @Valid 宣告物件需要驗證，驗證結果會被放到 BindingResult
+
+        // 判斷驗證是否通過
+        if (result.hasErrors()) {   // 若有錯誤發生
+            // 基本要傳給 user.jsp 的資訊
+            addBasicModel(model);
+            // 有錯誤的 user 資料一併帶入給表單使用(內含錯誤的原因)
+            model.addAttribute("user", user);
+            return "user/user";
+        }
         Boolean success = userService.addUser(user);
         return "redirect:/mvc/user";
     }

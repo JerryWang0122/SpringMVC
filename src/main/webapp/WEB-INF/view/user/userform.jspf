@@ -23,6 +23,9 @@
         <input name="_method" type="hidden" value="${ _method }" />
 
         <button type="submit" class="btn btn-primary">${ _method eq 'PUT' ? '修改' : '新增'}</button>
+        </p>
+        <%-- 顯示所有錯誤訊息 --%>
+        <sp:errors path="*" cssStyle="color: red" />
     </fieldset>
 
 </sp:form>
