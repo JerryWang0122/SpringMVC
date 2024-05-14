@@ -10,7 +10,7 @@
         <legend>User List</legend>
 
         <%-- User Table --%>
-        <table class="table table-bordered text-center table-striped">
+        <table id="myTable" class="table table-bordered text-center table-striped">
             <thead>
                 <tr>
                     <th>id</th>
