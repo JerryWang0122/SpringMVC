@@ -1,5 +1,6 @@
 package mvc.user.model.po;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,6 +30,7 @@ public class User {
     @NotNull(message = "{user.birth.notnull}")
     @Past(message = "{user.birth.past}")
     @DateTimeFormat(pattern = "yyyy-MM-dd")  // 日期格式
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date birth;  // 生日
 
     @Size(max = 1000, message = "{user.resume.size}")

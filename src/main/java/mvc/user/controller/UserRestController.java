@@ -59,5 +59,17 @@ public class UserRestController {
         return userService.addUser(user) + "";
     }
 
+    // 修改紀錄
+    @PutMapping("/{id}")
+    public String updateUser(@PathVariable Integer id, @RequestBody String updateJsonString) {
+        User user = gson.fromJson(updateJsonString, User.class);
+        return userService.updateUser(id, user) + "";
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteUser(@PathVariable Integer id) {
+        return userService.deleteUser(id) + "";
+    }
+
 
 }
