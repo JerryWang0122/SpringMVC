@@ -51,7 +51,13 @@ public class UserRestController {
         return gson.toJson(user);
     }
 
-
+    // 新增紀錄
+    @PostMapping
+    public String addUser(@RequestBody String userJsonString) {
+        // 將 userJsonString 轉 User 物件
+        User user = gson.fromJson(userJsonString, User.class);
+        return userService.addUser(user) + "";
+    }
 
 
 }
