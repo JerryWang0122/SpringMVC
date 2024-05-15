@@ -79,13 +79,7 @@ const handleDeleteUser = async (id) => {
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: '是的, 刪除它！',
-        cancelButtonText: '取消',
-        customClass: {
-            content: 'text-center' // 使用内联样式将文本置中
-        },
-        style: {
-            textAlign: 'center' // 或者直接在 style 中设置文本居中
-        }
+        cancelButtonText: '取消'
     })
 
     if (!result.isConfirmed) {
@@ -97,6 +91,12 @@ const handleDeleteUser = async (id) => {
     const response = await fetch(fullUrl, { method: 'DELETE'});  // 等待 fetch 請求完成
     const { state, message, data } = await response.json();     // 等待回應本文內容
     console.log(state, message, data);
+    Swal.fire({
+        title: "Deleted!",
+        text: "刪除成功！",
+        icon: "success",
+        color: '#fff'
+    })
     // 更新 user list
     fetchAndRenderData('/mvc/rest/user', 'user-list-body', renderUser);
 };
