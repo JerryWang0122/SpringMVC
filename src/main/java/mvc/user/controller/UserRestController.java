@@ -1,11 +1,12 @@
 package mvc.user.controller;
 
-import com.google.gson.Gson;
 import mvc.user.dao.BaseDataDao;
 import mvc.user.model.dto.UserDto;
 import mvc.user.model.po.User;
+import mvc.user.model.response.ApiResponse;
 import mvc.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,43 +34,71 @@ public class UserRestController {
     @Autowired
     private BaseDataDao baseDataDao;
 
-
-    Gson gson = new Gson();
-
     // 查詢多筆紀錄
     @GetMapping
-    public String queryAllUsers() {
+    public ResponseEntity<ApiResponse<List<UserDto>>> queryAllUsers() {
         List<UserDto> userDtos = userService.findUserDtos();
+        ApiResponse apiResponse = new ApiResponse<>(true, "query success", userDtos);
         // 回傳 json 字串
-        return gson.toJson(userDtos);
+        return ResponseEntity.ok(apiResponse);
     }
 
     // 查詢單筆紀錄
     @GetMapping("/{id}")
-    public String getUser(@PathVariable("id") Integer id) {
-        User user = userService.getUser(id);
-        return gson.toJson(user);
+    public ResponseEntity<ApiResponse<User>> getUser(@PathVariable("id") Integer id) {
+        try {
+            User user = userService.getUser(id);
+            ApiResponse<User> apiResponse = new ApiResponse<>(true, "get success", user);
+            return ResponseEntity.ok(apiResponse);
+        } catch (Exception e) {
+            e.printStackTrace();
+            ApiResponse apiResponse = new ApiResponse<>(false, e.getMessage(), null);
+            return ResponseEntity.ok(apiResponse);
+        }
     }
 
     // 新增紀錄
     @PostMapping
-    public String addUser(@RequestBody String userJsonString) {
-        // 將 userJsonString 轉 User 物件
-        User user = gson.fromJson(userJsonString, User.class);
-        return userService.addUser(user) + "";
+    public ResponseEntity<ApiResponse<User>> addUser(@RequestBody User user) {
+        Integer userId = userService.addUserAndGetId(user);
+        if (userId != null) {
+            user.setId(userId);
+            ApiResponse<User> apiResponse = new ApiResponse<>(true, "add success", user);
+            return ResponseEntity.ok(apiResponse);
+        }
+        ApiResponse<User> apiResponse = new ApiResponse<>(false, "add fail", user);
+        return ResponseEntity.ok(apiResponse);
+
     }
 
     // 修改紀錄
     @PutMapping("/{id}")
-    public String updateUser(@PathVariable Integer id, @RequestBody String updateJsonString) {
-        User user = gson.fromJson(updateJsonString, User.class);
-        return userService.updateUser(id, user) + "";
+    public ResponseEntity<ApiResponse<User>> updateUser(@PathVariable Integer id, @RequestBody User user) {
+        // 修改
+        Boolean state = userService.updateUser(id, user);
+        // 將 id 注入到user物件中，有助於前端判讀
+        user.setId(id);
+        String message = state ? "success" : "fail";
+        ApiResponse<User> apiResponse = new ApiResponse<>(state, "update " + message, user);
+        return ResponseEntity.ok(apiResponse);
     }
 
     @DeleteMapping("/{id}")
-    public String deleteUser(@PathVariable Integer id) {
-        return userService.deleteUser(id) + "";
+    public ResponseEntity<ApiResponse<User>> deleteUser(@PathVariable Integer id) {
+        User user = null;
+        try {
+            // 查詢該 user 是否存在
+            user = userService.getUser(id);
+            // 刪除
+            Boolean state = userService.deleteUser(id);
+            String message = state ? "success" : "fail";
+            // 回應資料
+            ApiResponse<User> apiResponse = new ApiResponse<>(state, "delete " + message, user);
+            return ResponseEntity.ok(apiResponse);
+        } catch (Exception e) {
+            ApiResponse<User> apiResponse = new ApiResponse<>(false, e.getMessage(), user);
+            return ResponseEntity.ok(apiResponse);
+        }
     }
-
 
 }
