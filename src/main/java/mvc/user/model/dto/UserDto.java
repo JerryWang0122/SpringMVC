@@ -1,5 +1,6 @@
 package mvc.user.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import mvc.user.model.po.Education;
 import mvc.user.model.po.Gender;
@@ -17,6 +18,7 @@ public class UserDto {
     private Integer age;  // 年齡
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")  // 日期格式
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date birth;  // 生日
 
     private String resume;  // 履歷
