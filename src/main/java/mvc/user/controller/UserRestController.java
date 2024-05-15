@@ -38,7 +38,6 @@ public class UserRestController {
     @GetMapping
     public ResponseEntity<ApiResponse<List<UserDto>>> queryAllUsers() {
         List<UserDto> userDtos = userService.findUserDtos();
-        userDtos.stream().forEach(e -> System.out.println(e.getBirth()));
         ApiResponse apiResponse = new ApiResponse<>(true, "query success", userDtos);
         // 回傳 json 字串
         return ResponseEntity.ok(apiResponse);
