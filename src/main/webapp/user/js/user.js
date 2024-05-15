@@ -25,10 +25,10 @@ const renderUser = ({ id, name, gender, age, birth, education, interestNames, in
     <td>${interestNames}</td>
     <td>${resume}</td>
     <td>
-        <span class="pure-button button-update update-user-button data-id="${id}">Edit</span>
+        <span class="pure-button button-update update-user-button" data-id="${id}">Edit</span>
     </td>
     <td>
-        <span class="pure-button button-delete delete-user-button data-id="${id}">Delete</span>
+        <span class="pure-button button-delete delete-user-button" data-id="${id}">Delete</span>
     </td>
 </tr>
 `;
@@ -59,18 +59,31 @@ const fetchAndRenderData = async(url, containerId, renderFn) => {
     }
 };
 
-const handleUpdateUser = () => {
-    console.log('按下修改')
+const handleUpdateUser = (id) => {
+    console.log('按下修改' + id)
 };
-const handleDeleteUser = () => {
-    console.log('按下刪除')
+const handleDeleteUser = async (id) => {
+    console.log('按下刪除' + id);
+    // 確認是否要刪除 ?
+    if (!confirm('是否要刪除')){
+        return;
+    }
+
+    // 進行刪除程序
+    const fullUrl = 'http://localhost:8080/SpringMVC_war_exploded/mvc/rest/user/' + id;
+    const response = await fetch(fullUrl, { method: 'DELETE'});  // 等待 fetch 請求完成
+    const { state, message, data } = await response.json();     // 等待回應本文內容
+    console.log(state, message, data);
+    // 更新 user list
+    fetchAndRenderData('/mvc/rest/user', 'user-list-body', renderUser);
 };
 
 const handleEvent = async(event, className, callback) => {
     if (!event.target.classList.contains(className)) {
         return;
     }
-    callback();
+    const id = event.target.getAttribute('data-id');
+    callback(id);
 }
 
 // 待 DOM 加載完成之後再執行
@@ -84,7 +97,7 @@ document.addEventListener("DOMContentLoaded", async() => {
 
     // 監聽 User List 是否有被點擊
     $('user-list-table').addEventListener("click", async(event) => {
-        console.log(event)
+        // console.log(event)
         // 處理事件
         await handleEvent(event, 'update-user-button', handleUpdateUser)
         await handleEvent(event, 'delete-user-button', handleDeleteUser)
