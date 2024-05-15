@@ -2,6 +2,8 @@ package mvc.user.controller;
 
 import mvc.user.dao.BaseDataDao;
 import mvc.user.model.dto.UserDto;
+import mvc.user.model.po.Education;
+import mvc.user.model.po.Interest;
 import mvc.user.model.po.User;
 import mvc.user.model.response.ApiResponse;
 import mvc.user.service.UserService;
@@ -33,6 +35,24 @@ public class UserRestController {
 
     @Autowired
     private BaseDataDao baseDataDao;
+
+    @GetMapping("/educations")
+    public ResponseEntity<ApiResponse<List<Education>>> queryEducations() {
+        List<Education> educations = baseDataDao.findAllEducations();
+        ApiResponse apiResponse = new ApiResponse<>(true, "query education success", educations);
+        // 回傳 json 字串
+        return ResponseEntity.ok(apiResponse);
+
+    }
+
+    @GetMapping("/interests")
+    public ResponseEntity<ApiResponse<List<Interest>>> queryInterests() {
+        List<Interest> interests = baseDataDao.findAllInterests();
+        ApiResponse apiResponse = new ApiResponse<>(true, "query interests success", interests);
+        // 回傳 json 字串
+        return ResponseEntity.ok(apiResponse);
+
+    }
 
     // 查詢多筆紀錄
     @GetMapping
