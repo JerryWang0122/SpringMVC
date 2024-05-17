@@ -157,13 +157,13 @@ const handleFormSubmit = async(event) => {
         resume: $('resume').value
     };
 
-    const id = $('user-form').getAttribute('data-id');
     const submitButtonText = $('form-submit-button').textContent;
 
     if (submitButtonText === '新增') {
         // 新增使用者
         addUser(formData);
     } else if (submitButtonText === '修改') {
+        const id = $('user-form').getAttribute('data-id');
         // 更新使用者
         updateUser(id, formData);
     }
@@ -188,12 +188,14 @@ const addUser = async(formData) => {
 
 // 取得並顯示使用者資料到表單上
 const getUserData = async(id) => {
-    const fullUrl = `http://localhost:8080/SpringMVC/mvc/rest/user/${id}`;
+    const fullUrl = `http://localhost:8080/SpringMVC_war_exploded/mvc/rest/user/${id}`;
     try {
         const response = await fetch(fullUrl);
         const {state, message, data} = await response.json();
         const user = data;
         console.log(user);
+
+        // 將得到的 user 資料配置在表單中
         $('name').value = user.name;
         $('age').value = user.age;
         $('birth').value = user.birth;
@@ -208,6 +210,7 @@ const getUserData = async(id) => {
 
         $('resume').value = user.resume;
 
+        // 在表單中加入一個屬性 data-id 用來記錄修改的 id 為何
         $('user-form').setAttribute('data-id', user.id);
         $('form-submit-button').textContent = '修改';
     } catch(e) {
@@ -217,7 +220,7 @@ const getUserData = async(id) => {
 
 // 更新使用者資料
 const updateUser = async(id, formData) => {
-    const fullUrl = `http://localhost:8080/SpringMVC/mvc/rest/user/${id}`;
+    const fullUrl = `http://localhost:8080/SpringMVC_war_exploded/mvc/rest/user/${id}`;
     try {
         const response = await fetch(fullUrl, {
             method: 'PUT',
